@@ -1,0 +1,8 @@
+## Interface: 11200
+## Title: MainCharacterTag
+## Notes: Prefixes guild chat messages with your main character's name so guildies know who you are.
+## Version: 1.1
+## Author: Olzon
+## SavedVariables: MainCharacterTagDB
+
+MainCharacterTag_OC.lua
