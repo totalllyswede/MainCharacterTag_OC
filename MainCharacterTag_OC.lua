@@ -64,29 +64,34 @@ optionsFrame:SetScript("OnDragStop", function() optionsFrame:StopMovingOrSizing(
 optionsFrame:Hide()
 
 -- Title bar text
-local titleText = optionsFrame:CreateFontString(nil, "OVERLAY", "GameFontNormal")
+local titleText = optionsFrame:CreateFontString(nil, "OVERLAY", "GameFontNormalLarge")
 titleText:SetPoint("TOP", optionsFrame, "TOP", 0, -16)
 titleText:SetText("MainCharacterTag — Options")
 
+-- Author text
+local authorText = optionsFrame:CreateFontString(nil, "OVERLAY", "GameFontWhite")
+authorText:SetPoint("TOP", optionsFrame, "TOP", 0, -38)
+authorText:SetText("Created by: Olzon")
+
 -- Description
 local descText = optionsFrame:CreateFontString(nil, "OVERLAY", "GameFontHighlightSmall")
-descText:SetPoint("TOPLEFT", optionsFrame, "TOPLEFT", 20, -42)
+descText:SetPoint("TOPLEFT", optionsFrame, "TOPLEFT", 20, -60)
 descText:SetWidth(320)
 descText:SetJustifyH("LEFT")
 descText:SetText("Set your main character's name. Guild and officer chat\nsent from alts will be prefixed with that name.")
 
 -- Current character label
 local currentLabel = optionsFrame:CreateFontString(nil, "OVERLAY", "GameFontHighlightSmall")
-currentLabel:SetPoint("TOPLEFT", optionsFrame, "TOPLEFT", 20, -82)
+currentLabel:SetPoint("TOPLEFT", optionsFrame, "TOPLEFT", 20, -92)
 
 -- Name input label
 local nameLabel = optionsFrame:CreateFontString(nil, "OVERLAY", "GameFontNormal")
-nameLabel:SetPoint("TOPLEFT", optionsFrame, "TOPLEFT", 20, -108)
+nameLabel:SetPoint("TOPLEFT", optionsFrame, "TOPLEFT", 20, -118)
 nameLabel:SetText("Main Name:")
 
 -- EditBox
 local nameInput = CreateFrame("EditBox", "MainCharacterTagInput", optionsFrame)
-nameInput:SetPoint("TOPLEFT", optionsFrame, "TOPLEFT", 100, -104)
+nameInput:SetPoint("TOPLEFT", optionsFrame, "TOPLEFT", 100, -114)
 nameInput:SetWidth(230)
 nameInput:SetHeight(20)
 nameInput:SetAutoFocus(false)
