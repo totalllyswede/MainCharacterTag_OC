@@ -1,8 +1,8 @@
 # MainCharacterTag
 
-![Version](https://img.shields.io/badge/version-1.1-blue) ![Interface](https://img.shields.io/badge/interface-1.12.1-yellow)
+![Version](https://img.shields.io/badge/version-1.2-blue) ![Interface](https://img.shields.io/badge/interface-3.3.5-yellow)
 
-A lightweight World of Warcraft addon for vanilla (1.12.1) that automatically tags your guild chat messages with your main character's name when playing on alts.
+A lightweight World of Warcraft addon for WotLK (3.3.5) that automatically tags your guild chat messages with your main character's name when playing on alts.
 
 ## What it does
 
@@ -45,8 +45,14 @@ Enter your main character's name and click **Save**. That's it.
 
 ## Changelog
 
+### 1.2
+- Rewritten for WoW 3.3.5 (Wrath of the Lich King)
+- Uses modern WotLK API (`ADDON_LOADED`, `BasicFrameTemplate`, `InputBoxTemplate`)
+- Method-style Lua string calls (`:upper()`, `:match()`, `:sub()`)
+
 ### 1.1
 - Fixed an issue where logging in on an alt could trigger unintended chat messages from other addons during the login sequence
+- Fixed macro directives (e.g. `#showtooltip`) incorrectly being sent to guild chat
 
 ### 1.0
 - Initial release

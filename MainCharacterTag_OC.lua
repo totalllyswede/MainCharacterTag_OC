@@ -1,16 +1,18 @@
--- MainCharacterTag
+-- MainCharacterTag_OC
 -- Prefixes guild and guild officer chat with your main character's name.
 -- Compatible with WoW 1.12.1
 
-MainCharacterTagDB = MainCharacterTagDB or {}
+MainCharacterTag_OCDB = MainCharacterTag_OCDB or {}
+
+local playerReady = false
 
 local function GetMainName()
-    return MainCharacterTagDB.mainName or ""
+    return MainCharacterTag_OCDB.mainName or ""
 end
 
 local function SetMainName(name)
     name = string.gsub(name, "^%s*(.-)%s*$", "%1")
-    MainCharacterTagDB.mainName = name
+    MainCharacterTag_OCDB.mainName = name
 end
 
 local function IsCurrentCharMain()
@@ -24,19 +26,17 @@ end
 -- Only active after the player is fully in the world
 -- ============================================================
 local origSendChatMessage = SendChatMessage
-local playerReady = false
 
 function SendChatMessage(msg, chatType, language, channel)
     if playerReady and msg and msg ~= "" and chatType then
         -- ignore macro directives
-        if string.sub(msg, 1, 1) == "#" then
-            return origSendChatMessage(msg, chatType, language, channel)
-        end
-        local upperType = string.upper(chatType)
-        if (upperType == "GUILD" or upperType == "OFFICER") then
-            local mainName = GetMainName()
-            if mainName ~= "" and not IsCurrentCharMain() then
-                msg = "(" .. mainName .. "): " .. msg
+        if string.sub(msg, 1, 1) ~= "#" then
+            local upperType = string.upper(chatType)
+            if upperType == "GUILD" or upperType == "OFFICER" then
+                local mainName = GetMainName()
+                if mainName ~= "" and not IsCurrentCharMain() then
+                    msg = "(" .. mainName .. "): " .. msg
+                end
             end
         end
     end
@@ -44,9 +44,9 @@ function SendChatMessage(msg, chatType, language, channel)
 end
 
 -- ============================================================
--- Options Frame  (vanilla-compatible, no XML templates)
+-- Options Frame (vanilla-compatible, no XML templates)
 -- ============================================================
-local optionsFrame = CreateFrame("Frame", "MainCharacterTagOptions", UIParent)
+local optionsFrame = CreateFrame("Frame", "MainCharacterTag_OCOptions", UIParent)
 optionsFrame:SetWidth(360)
 optionsFrame:SetHeight(200)
 optionsFrame:SetPoint("CENTER", UIParent, "CENTER")
@@ -63,35 +63,30 @@ optionsFrame:SetScript("OnDragStart", function() optionsFrame:StartMoving() end)
 optionsFrame:SetScript("OnDragStop", function() optionsFrame:StopMovingOrSizing() end)
 optionsFrame:Hide()
 
--- Title bar text
-local titleText = optionsFrame:CreateFontString(nil, "OVERLAY", "GameFontNormalLarge")
+-- Title
+local titleText = optionsFrame:CreateFontString(nil, "OVERLAY", "GameFontNormal")
 titleText:SetPoint("TOP", optionsFrame, "TOP", 0, -16)
-titleText:SetText("MainCharacterTag — Options")
-
--- Author text
-local authorText = optionsFrame:CreateFontString(nil, "OVERLAY", "GameFontWhite")
-authorText:SetPoint("TOP", optionsFrame, "TOP", 0, -38)
-authorText:SetText("Created by: Olzon")
+titleText:SetText("MainCharacterTag_OC — Options")
 
 -- Description
 local descText = optionsFrame:CreateFontString(nil, "OVERLAY", "GameFontHighlightSmall")
-descText:SetPoint("TOPLEFT", optionsFrame, "TOPLEFT", 20, -60)
+descText:SetPoint("TOPLEFT", optionsFrame, "TOPLEFT", 20, -42)
 descText:SetWidth(320)
 descText:SetJustifyH("LEFT")
 descText:SetText("Set your main character's name. Guild and officer chat\nsent from alts will be prefixed with that name.")
 
 -- Current character label
 local currentLabel = optionsFrame:CreateFontString(nil, "OVERLAY", "GameFontHighlightSmall")
-currentLabel:SetPoint("TOPLEFT", optionsFrame, "TOPLEFT", 20, -92)
+currentLabel:SetPoint("TOPLEFT", optionsFrame, "TOPLEFT", 20, -82)
 
 -- Name input label
 local nameLabel = optionsFrame:CreateFontString(nil, "OVERLAY", "GameFontNormal")
-nameLabel:SetPoint("TOPLEFT", optionsFrame, "TOPLEFT", 20, -118)
+nameLabel:SetPoint("TOPLEFT", optionsFrame, "TOPLEFT", 20, -108)
 nameLabel:SetText("Main Name:")
 
 -- EditBox
-local nameInput = CreateFrame("EditBox", "MainCharacterTagInput", optionsFrame)
-nameInput:SetPoint("TOPLEFT", optionsFrame, "TOPLEFT", 100, -114)
+local nameInput = CreateFrame("EditBox", "MainCharacterTag_OCInput", optionsFrame)
+nameInput:SetPoint("TOPLEFT", optionsFrame, "TOPLEFT", 100, -104)
 nameInput:SetWidth(230)
 nameInput:SetHeight(20)
 nameInput:SetAutoFocus(false)
@@ -123,9 +118,9 @@ saveBtn:SetScript("OnClick", function()
     local name = nameInput:GetText()
     SetMainName(name)
     if name == "" then
-        DEFAULT_CHAT_FRAME:AddMessage("|cff00ff96MainCharacterTag:|r Main name cleared. Prefix disabled.")
+        DEFAULT_CHAT_FRAME:AddMessage("|cff00ff96MainCharacterTag_OC:|r Main name cleared. Prefix disabled.")
     else
-        DEFAULT_CHAT_FRAME:AddMessage("|cff00ff96MainCharacterTag:|r Main set to |cffffd700" .. name .. "|r")
+        DEFAULT_CHAT_FRAME:AddMessage("|cff00ff96MainCharacterTag_OC:|r Main set to |cffffd700" .. name .. "|r")
     end
     optionsFrame:Hide()
 end)
@@ -157,9 +152,9 @@ end)
 -- ============================================================
 -- Slash commands
 -- ============================================================
-SLASH_MAINCHARACTERTAG1 = "/mct"
-SLASH_MAINCHARACTERTAG2 = "/mainchartag"
-SlashCmdList["MAINCHARACTERTAG"] = function(msg)
+SLASH_MAINCHARACTERTAG_OC1 = "/mct"
+SLASH_MAINCHARACTERTAG_OC2 = "/mainchartag"
+SlashCmdList["MAINCHARACTERTAG_OC"] = function(msg)
     if optionsFrame:IsShown() then
         optionsFrame:Hide()
     else
@@ -175,8 +170,8 @@ eventFrame:RegisterEvent("VARIABLES_LOADED")
 eventFrame:RegisterEvent("PLAYER_ENTERING_WORLD")
 eventFrame:SetScript("OnEvent", function()
     if event == "VARIABLES_LOADED" then
-        MainCharacterTagDB = MainCharacterTagDB or {}
-        DEFAULT_CHAT_FRAME:AddMessage("|cff00ff96MainCharacterTag|r loaded. Type |cffffd700/mct|r to open options.")
+        MainCharacterTag_OCDB = MainCharacterTag_OCDB or {}
+        DEFAULT_CHAT_FRAME:AddMessage("|cff00ff96MainCharacterTag_OC|r loaded. Type |cffffd700/mct|r to open options.")
     elseif event == "PLAYER_ENTERING_WORLD" then
         playerReady = true
     end
