@@ -1,6 +1,5 @@
 # MainCharacterTag
 
-![Version](https://img.shields.io/badge/version-1.2-blue) ![Interface](https://img.shields.io/badge/interface-3.3.5-yellow)
 
 A lightweight World of Warcraft addon for WoW 1.12.1 that automatically tags your guild chat messages with your main character's name when playing on alts.
 
