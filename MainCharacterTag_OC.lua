@@ -29,8 +29,8 @@ local origSendChatMessage = SendChatMessage
 
 function SendChatMessage(msg, chatType, language, channel)
     if playerReady and msg and msg ~= "" and chatType then
-        -- ignore macro directives
-        if string.sub(msg, 1, 1) ~= "#" then
+        local firstChar = string.sub(msg, 1, 1)
+        if firstChar ~= "#" and firstChar ~= "/" and firstChar ~= "." then
             local upperType = string.upper(chatType)
             if upperType == "GUILD" or upperType == "OFFICER" then
                 local mainName = GetMainName()

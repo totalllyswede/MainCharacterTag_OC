@@ -1,7 +1,8 @@
-# MainCharacterTag
+# MainCharacterTag_OC
 
+![Version](https://img.shields.io/badge/version-1.3-blue) ![Interface](https://img.shields.io/badge/OctoWoW_1.18-1.12.1-yellow)
 
-A lightweight World of Warcraft addon for WoW 1.12.1 that automatically tags your guild chat messages with your main character's name when playing on alts.
+A lightweight World of Warcraft addon for OctoWoW (1.18) or other 1.12.1 WoW clients that automatically tags your guild chat messages with your main character's name when playing on alts.
 
 ## What it does
 
@@ -15,12 +16,13 @@ Messages sent from your main character are unaffected.
 ## Installation
 
 1. Download and unzip the addon
-2. Place the `MainCharacterTag` folder in:
+2. Remove `-main` from the folder name if downloaded from GitHub (it should be `MainCharacterTag_OC`)
+3. Place the `MainCharacterTag_OC` folder in:
    ```
    World of Warcraft/Interface/AddOns/
    ```
-3. Restart WoW or reload your UI (`/reload`)
-4. Enable **MainCharacterTag** on the character select screen
+4. Restart WoW or reload your UI (`/reload`)
+5. Enable **MainCharacterTag_OC** on the character select screen
 
 ## Usage
 
@@ -38,18 +40,17 @@ Enter your main character's name and click **Save**. That's it.
 ## Notes
 
 - Only affects **Guild** (`/g`) and **Guild Officer** (`/o`) chat
+- Messages starting with `.`, `/`, or `#` are never prefixed
 - Your main's name is saved between sessions per character
 - Works on any number of alts
 - No performance impact — only runs when you send a guild message
 
 ## Changelog
 
-### 1.2
-- Rewritten for WoW 3.3.5 (Wrath of the Lich King)
-- Uses modern WotLK API (`ADDON_LOADED`, `BasicFrameTemplate`, `InputBoxTemplate`)
-- Method-style Lua string calls (`:upper()`, `:match()`, `:sub()`)
+### 1.3
+- Messages starting with `.` (server commands), `/` (slash commands), and `#` (macro directives) are now ignored by the prefix hook
 
-### 1.1
+### 1.2
 - Fixed an issue where logging in on an alt could trigger unintended chat messages from other addons during the login sequence
 - Fixed macro directives (e.g. `#showtooltip`) incorrectly being sent to guild chat
 
