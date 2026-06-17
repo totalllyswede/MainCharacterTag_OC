@@ -1,6 +1,6 @@
 # MainCharacterTag_OC
 
-![Version](https://img.shields.io/badge/version-1.3-blue) ![Interface](https://img.shields.io/badge/OctoWoW_1.18-1.12.1-yellow)
+![Version](https://img.shields.io/badge/version-1.5-blue) ![Interface](https://img.shields.io/badge/OctoWoW_1.18-1.12.1-yellow)
 
 A lightweight World of Warcraft addon for OctoWoW (1.18) or other 1.12.1 WoW clients that automatically tags your guild chat messages with your main character's name when playing on alts.
 
@@ -41,11 +41,18 @@ Enter your main character's name and click **Save**. That's it.
 
 - Only affects **Guild** (`/g`) and **Guild Officer** (`/o`) chat
 - Messages starting with `.`, `/`, or `#` are never prefixed
+- Achievement spam filter is off by default and can be toggled in the options window
 - Your main's name is saved between sessions per character
 - Works on any number of alts
 - No performance impact — only runs when you send a guild message
 
 ## Changelog
+
+### 1.5
+- Added checkbox in options to toggle filtering of `has earned the achievement` messages in guild and officer chat (default: off)
+
+### 1.4
+- Achievement messages (`has earned the achievement`) are now hidden from guild and officer chat
 
 ### 1.3
 - Messages starting with `.` (server commands), `/` (slash commands), and `#` (macro directives) are now ignored by the prefix hook

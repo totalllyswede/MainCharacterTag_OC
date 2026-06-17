@@ -44,11 +44,26 @@ function SendChatMessage(msg, chatType, language, channel)
 end
 
 -- ============================================================
+-- Filter achievement messages from guild and officer chat
+-- Hooks ChatFrame_OnEvent, the correct approach for 1.12.1
+-- ============================================================
+local origChatFrameOnEvent = ChatFrame_OnEvent
+
+function ChatFrame_OnEvent(event)
+    if (event == "CHAT_MSG_GUILD" or event == "CHAT_MSG_OFFICER") then
+        if MainCharacterTag_OCDB.filterAchievements and arg1 and string.find(string.lower(arg1), "has earned the achievement") then
+            return
+        end
+    end
+    origChatFrameOnEvent(event)
+end
+
+-- ============================================================
 -- Options Frame (vanilla-compatible, no XML templates)
 -- ============================================================
 local optionsFrame = CreateFrame("Frame", "MainCharacterTag_OCOptions", UIParent)
 optionsFrame:SetWidth(360)
-optionsFrame:SetHeight(200)
+optionsFrame:SetHeight(240)
 optionsFrame:SetPoint("CENTER", UIParent, "CENTER")
 optionsFrame:SetBackdrop({
     bgFile   = "Interface\\DialogFrame\\UI-DialogBox-Background",
@@ -103,6 +118,20 @@ nameInput:SetBackdropBorderColor(0.4, 0.4, 0.4, 0.8)
 nameInput:SetScript("OnEnterPressed", function() nameInput:ClearFocus() end)
 nameInput:SetScript("OnEscapePressed", function() nameInput:ClearFocus() end)
 
+-- Achievement filter checkbox
+local achieveCheck = CreateFrame("CheckButton", "MainCharacterTag_OCAchieveCheck", optionsFrame, "UICheckButtonTemplate")
+achieveCheck:SetPoint("TOPLEFT", optionsFrame, "TOPLEFT", 16, -132)
+achieveCheck:SetWidth(24)
+achieveCheck:SetHeight(24)
+
+local achieveLabel = optionsFrame:CreateFontString(nil, "OVERLAY", "GameFontHighlightSmall")
+achieveLabel:SetPoint("LEFT", achieveCheck, "RIGHT", 4, 0)
+achieveLabel:SetText("Hide 'has earned the achievement' messages in guild chat")
+
+achieveCheck:SetScript("OnClick", function()
+    MainCharacterTag_OCDB.filterAchievements = achieveCheck:GetChecked() and true or false
+end)
+
 -- Status text centered above buttons
 local statusLabel = optionsFrame:CreateFontString(nil, "OVERLAY", "GameFontHighlightSmall")
 statusLabel:SetPoint("BOTTOM", optionsFrame, "BOTTOM", 0, 50)
@@ -139,6 +168,7 @@ end)
 optionsFrame:SetScript("OnShow", function()
     nameInput:SetText(GetMainName())
     currentLabel:SetText("Logged in as: |cffffd700" .. (UnitName("player") or "Unknown") .. "|r")
+    achieveCheck:SetChecked(MainCharacterTag_OCDB.filterAchievements and true or false)
     local main = GetMainName()
     if main == "" then
         statusLabel:SetText("|cffaaaaaa(No main set — prefix disabled)|r")
@@ -171,6 +201,9 @@ eventFrame:RegisterEvent("PLAYER_ENTERING_WORLD")
 eventFrame:SetScript("OnEvent", function()
     if event == "VARIABLES_LOADED" then
         MainCharacterTag_OCDB = MainCharacterTag_OCDB or {}
+        if MainCharacterTag_OCDB.filterAchievements == nil then
+            MainCharacterTag_OCDB.filterAchievements = false
+        end
         DEFAULT_CHAT_FRAME:AddMessage("|cff00ff96MainCharacterTag_OC|r loaded. Type |cffffd700/mct|r to open options.")
     elseif event == "PLAYER_ENTERING_WORLD" then
         playerReady = true
